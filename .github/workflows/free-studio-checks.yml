@@ -1,4 +1,4 @@
-name: Free Studio source checks
+name: Free Studio checks
 on:
   pull_request:
     paths:
@@ -16,6 +16,7 @@ on:
       - 'lib/free-studio.mjs'
       - 'middleware.js'
       - 'tests/freeStudio.test.mjs'
+      - '.github/workflows/free-studio-checks.yml'
 permissions:
   contents: read
 jobs:
@@ -28,3 +29,22 @@ jobs:
           node-version: '22'
       - name: Run offline Free Studio tests
         run: node --test tests/freeStudio.test.mjs
+  nextjs-production-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install packages without running dependency lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Build workspace packages
+        run: npm run build:packages
+      - name: Compile Next.js production application
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
