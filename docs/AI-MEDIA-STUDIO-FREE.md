@@ -37,9 +37,12 @@ CF_ACCOUNT_ID=<your_32_character_Cloudflare_account_id>
 CF_API_TOKEN=<private_Cloudflare_Workers_AI_API_token>
 STUDIO_ACCESS_KEY=<strong_private_studio_password>
 CLOUDFLARE_FREE_PLAN_CONFIRMED=yes
+FREE_STUDIO_ONLY=yes
 ```
 
 Never prefix any secret with `NEXT_PUBLIC_`; never put secrets in a `netlify.toml` file, a public GitHub file, or a prompt to an AI assistant.
+
+**CRITICAL: set `FREE_STUDIO_ONLY=yes` on the deployed site. This redirects legacy studio routes to `/free-studio` and returns 404 for other API routes while security issues remain under review.**
 
 **Deployment must be triggered after setting variables.** Runtime variables need a fresh deployment.
 
