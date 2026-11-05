@@ -11,6 +11,7 @@ const DesignAgentStudio = dynamic(() => import('studio').then(mod => mod.DesignA
 });
 import axios from 'axios';
 import ApiKeyModal from './ApiKeyModal';
+import MobileBottomNav from './MobileBottomNav';
 import { getCommonCopy, getLocaleConfig, localizeStudioPath } from '@/lib/locales';
 
 // Tab/category ids, icons, and English `label` fallbacks are stable
@@ -681,7 +682,7 @@ export default function StandaloneShell({ locale = 'en' }) {
 
   return (
     <div 
-      className="h-screen bg-[#030303] flex flex-col overflow-hidden text-white relative"
+      className="mobile-pwa-shell h-screen bg-[#030303] flex flex-col overflow-hidden text-white relative"
       onDragOver={handleDragOver}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -1050,6 +1051,15 @@ export default function StandaloneShell({ locale = 'en' }) {
         </div>
       </div>
     </div>
+
+      {isHeaderVisible && (
+        <MobileBottomNav
+          activeTab={activeTab}
+          onSelect={handleTabChange}
+          onMore={() => setIsMobileOpen(true)}
+          getLabel={tabLabel}
+        />
+      )}
 
       {/* Global generation activity and notification stack */}
       {(activeGenerations.length > 0 || notifications.length > 0) && (
