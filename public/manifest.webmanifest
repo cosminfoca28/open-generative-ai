@@ -1,0 +1,15 @@
+{
+  "id": "/studio",
+  "name": "AI Media Studio",
+  "short_name": "AI Studio",
+  "description": "Image and video creative workspace for mobile",
+  "start_url": "/studio",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#030303",
+  "theme_color": "#09090b",
+  "icons": [
+    {"src": "/mobile-studio-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

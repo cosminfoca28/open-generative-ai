@@ -58,3 +58,55 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in-up { animation: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+/* iPhone / mobile home-screen layout (does not affect desktop UI). */
+@media (max-width: 767px) {
+  .mobile-pwa-shell {
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  .mobile-studio-tabbar {
+    z-index: 35;
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-around;
+    width: 100%;
+    height: calc(66px + env(safe-area-inset-bottom, 0px));
+    padding: 4px 6px env(safe-area-inset-bottom, 0px);
+    border-top: 1px solid rgba(255,255,255,0.10);
+    background: rgba(10,10,11,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .mobile-studio-tab {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 44px;
+    border-radius: 12px;
+    background: transparent;
+    color: #9ca3af;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .mobile-studio-tab.is-active {
+    color: #22d3ee;
+    background: rgba(34,211,238,0.09);
+  }
+
+  .mobile-studio-tab:focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: -2px;
+  }
+}
