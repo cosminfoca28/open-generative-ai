@@ -14,6 +14,22 @@ export default function FreeStudioClient() {
   const [generating, setGenerating] = useState(false);
   const [image, setImage] = useState('');
   const [error, setError] = useState('');
+  const [canShareFile, setCanShareFile] = useState(false);
+
+  // iPhone: the share sheet offers "Save Image" (to Photos); <a download> only saves to Files.
+  async function imageFile() {
+    // Decode locally: the CSP's connect-src does not allow fetch() of data: URLs.
+    const bytes = Uint8Array.from(atob(image.split(',')[1]), (c) => c.charCodeAt(0));
+    return new File([bytes], 'ai-media-studio.jpg', { type: 'image/jpeg' });
+  }
+
+  async function shareImage() {
+    try {
+      await navigator.share({ files: [await imageFile()] });
+    } catch (err) {
+      if (err?.name !== 'AbortError') setError('Could not open the share sheet. Use Download instead.');
+    }
+  }
 
   async function generate(event) {
     event.preventDefault();
@@ -34,6 +50,10 @@ export default function FreeStudioClient() {
       const body = await response.json();
       if (!response.ok || !body.image) throw new Error(body.error || 'Image generation unavailable.');
       setImage(body.image);
+      try {
+        const probe = new File([new Blob()], 'probe.jpg', { type: 'image/jpeg' });
+        setCanShareFile(typeof navigator.canShare === 'function' && navigator.canShare({ files: [probe] }));
+      } catch { setCanShareFile(false); }
     } catch (err) {
       setError(err.message || 'Could not create this image.');
     } finally {
@@ -78,8 +98,9 @@ export default function FreeStudioClient() {
             </div>
             {image && (
               <div className="fs-result-actions">
+                {canShareFile && <button type="button" className="fs-download" onClick={shareImage}>Save to Photos ↑</button>}
                 <a className="fs-download" href={image} download="ai-media-studio.jpg">Download image ↓</a>
-                <span>On iPhone, you can also open the image and use Share → Save Image.</span>
+                <span>On iPhone you can also touch and hold the image, then Save to Photos.</span>
               </div>
             )}
 
@@ -90,7 +111,7 @@ export default function FreeStudioClient() {
                 {EXAMPLES.map((example) => <button key={example.title} type="button" onClick={() => setPrompt(example.prompt)}>{example.title} ↗</button>)}
               </div>
               <label htmlFor="fs-key">Studio access password</label>
-              <input id="fs-key" type="password" autoComplete="off" placeholder="Your private studio password" value={accessKey} onChange={(event) => setAccessKey(event.target.value)} required />
+              <input id="fs-key" type="password" autoComplete="current-password" enterKeyHint="go" placeholder="Your private studio password" value={accessKey} onChange={(event) => setAccessKey(event.target.value)} required />
               <div className="fs-model"><span>MODEL</span><strong>FLUX.1 Schnell</strong><small>Cloudflare Free tier · 4 steps</small></div>
               <button type="submit" className="fs-generate" disabled={generating || prompt.trim().length < 3 || !accessKey}>{generating ? 'Generating your image…' : '✦ Generate image'}</button>
               {error && <p className="fs-error" role="alert">{error}</p>}

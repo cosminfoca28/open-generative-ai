@@ -38,3 +38,11 @@ test('iPhone home-screen icon is a PNG and is reachable in free-only mode', () =
   const mw = readFileSync(new URL('../middleware.js', import.meta.url), 'utf8');
   assert.match(mw, /apple-touch-icon\.png/);
 });
+
+test('iPhone save uses the share sheet without fetching data: URLs (blocked by CSP)', () => {
+  const src = readFileSync(new URL('../app/free-studio/FreeStudioClient.js', import.meta.url), 'utf8');
+  assert.match(src, /navigator\.share\(\{ files:/);
+  assert.match(src, /navigator\.canShare/);
+  assert.doesNotMatch(src, /fetch\(image\)/);
+  assert.match(src, /autoComplete="current-password"/);
+});
