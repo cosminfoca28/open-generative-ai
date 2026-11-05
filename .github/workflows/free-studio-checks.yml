@@ -5,8 +5,9 @@ on:
       - 'app/free-studio/**'
       - 'app/api/free-image/**'
       - 'lib/free-studio.mjs'
+      - 'lib/free-studio-origin.mjs'
       - 'middleware.js'
-      - 'tests/freeStudio.test.mjs'
+      - 'tests/freeStudio*.test.mjs'
       - '.github/workflows/free-studio-checks.yml'
   push:
     branches: [feature/free-mobile-images]
@@ -14,8 +15,9 @@ on:
       - 'app/free-studio/**'
       - 'app/api/free-image/**'
       - 'lib/free-studio.mjs'
+      - 'lib/free-studio-origin.mjs'
       - 'middleware.js'
-      - 'tests/freeStudio.test.mjs'
+      - 'tests/freeStudio*.test.mjs'
 permissions:
   contents: read
 jobs:
@@ -27,4 +29,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline Free Studio tests
-        run: node --test tests/freeStudio.test.mjs
+        run: node --test tests/freeStudio.test.mjs tests/freeStudioHardening.test.mjs

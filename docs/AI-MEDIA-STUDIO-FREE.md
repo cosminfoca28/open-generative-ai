@@ -44,6 +44,8 @@ Never prefix any secret with `NEXT_PUBLIC_`; never put secrets in a `netlify.tom
 
 **CRITICAL: set `FREE_STUDIO_ONLY=yes` on the deployed site. This redirects legacy studio routes to `/free-studio` and returns 404 for other API routes while security issues remain under review.**
 
+Free-only mode is **fail-closed**: if `FREE_STUDIO_ONLY` is missing or unreadable (for example in the edge middleware), the site still runs free-only. Only the explicit value `FREE_STUDIO_ONLY=no` exposes the full upstream studio, and that is meant for local development only. `FREE_STUDIO_ONLY` is not a secret; set it for all scopes.
+
 **Deployment must be triggered after setting variables.** Runtime variables need a fresh deployment.
 
 On Netlify, Next.js route handlers use server-side functions through the OpenNext adapter. Confirm it builds before sharing the address. Keep the original unsecured studio and any other routes out of public production until the known upstream history-rendering XSS report (#309) and session/API key handling are reviewed.

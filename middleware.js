@@ -25,14 +25,17 @@ export function middleware(request) {
     const url = request.nextUrl;
 
     // Private launch mode: isolate the Free Studio from unreviewed legacy studio
-    // routes (including the upstream history XSS report). Enable on hosting with
-    // FREE_STUDIO_ONLY=yes. Do not remove until a security audit is complete.
-    if (process.env.FREE_STUDIO_ONLY === 'yes') {
+    // routes (including the upstream history XSS report, issue #309).
+    // Fail-closed: free-only is the DEFAULT. Only FREE_STUDIO_ONLY=no exposes the
+    // full upstream studio (for local development). Production must keep
+    // FREE_STUDIO_ONLY=yes; a missing or unreadable variable stays free-only.
+    if (process.env.FREE_STUDIO_ONLY !== 'no') {
         const path = url.pathname;
         const allowed = path === '/free-studio' ||
             path === '/api/free-image' ||
             path === '/free-studio.webmanifest' ||
-            path === '/free-studio-icon.svg';
+            path === '/free-studio-icon.svg' ||
+            path === '/apple-touch-icon.png';
         if (!allowed) {
             const isApi = path.startsWith('/api/');
             return addSecurityHeaders(isApi
