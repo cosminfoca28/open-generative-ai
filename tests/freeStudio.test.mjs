@@ -40,3 +40,10 @@ test('manifest is standalone and points to the free studio', () => {
   assert.equal(manifest.display, 'standalone');
   assert.equal(manifest.start_url, '/free-studio');
 });
+
+test('host can isolate legacy studio during security review', () => {
+  const src = readFileSync(new URL('../middleware.js', import.meta.url), 'utf8');
+  assert.match(src, /FREE_STUDIO_ONLY/);
+  assert.match(src, /api\/free-image/);
+  assert.match(src, /NextResponse\.redirect/);
+});
