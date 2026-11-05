@@ -1,0 +1,10 @@
+# Netlify: build the hosted (Next.js) web version of the studio.
+# Netlify clones the git submodules and runs `npm install` (workspaces)
+# before this command. No environment variables are needed: each visitor
+# enters their own MuAPI key in the app.
+[build]
+  command = "npm run build:packages && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
