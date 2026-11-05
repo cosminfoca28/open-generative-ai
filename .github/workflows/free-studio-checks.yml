@@ -5,17 +5,23 @@ on:
       - 'app/free-studio/**'
       - 'app/api/free-image/**'
       - 'lib/free-studio.mjs'
+      - 'lib/free-studio-origin.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'middleware.js'
-      - 'tests/freeStudio.test.mjs'
+      - 'tests/freeStudio*.test.mjs'
       - '.github/workflows/free-studio-checks.yml'
   push:
-    branches: [feature/free-mobile-images]
+    branches: [main, feature/free-mobile-images]
     paths:
       - 'app/free-studio/**'
       - 'app/api/free-image/**'
       - 'lib/free-studio.mjs'
+      - 'lib/free-studio-origin.mjs'
+      - 'package.json'
+      - 'package-lock.json'
       - 'middleware.js'
-      - 'tests/freeStudio.test.mjs'
+      - 'tests/freeStudio*.test.mjs'
       - '.github/workflows/free-studio-checks.yml'
 permissions:
   contents: read
@@ -28,7 +34,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run offline Free Studio tests
-        run: node --test tests/freeStudio.test.mjs
+        run: node --test tests/freeStudio.test.mjs tests/freeStudioHardening.test.mjs
   nextjs-production-build:
     runs-on: ubuntu-latest
     steps:

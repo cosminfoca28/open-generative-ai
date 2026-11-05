@@ -5,7 +5,7 @@ export const metadata = {
   description: 'Create AI images using a quota-limited free-tier provider.',
   manifest: '/free-studio.webmanifest',
   appleWebApp: { capable: true, title: 'AI Free Studio', statusBarStyle: 'black-translucent' },
-  icons: { icon: '/free-studio-icon.svg' },
+  icons: { icon: '/free-studio-icon.svg', apple: '/apple-touch-icon.png' },
 };
 
 export const viewport = {

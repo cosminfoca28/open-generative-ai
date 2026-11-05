@@ -1,5 +1,6 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { validateImagePrompt, readCloudflareImage } from '../../../lib/free-studio.mjs';
+import { isSameHostRequest } from '../../../lib/free-studio-origin.mjs';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -29,8 +30,14 @@ export async function POST(request) {
   }
 
   // Browser CSRF / cross-origin safeguard in addition to access-password protection.
+  // Compare hosts, not full origins: behind Netlify's proxy request.url may not
+  // carry the public scheme/host, which would reject legitimate same-site calls.
   const origin = request.headers.get('origin');
-  if (origin && origin !== new URL(request.url).origin) {
+  if (origin && !isSameHostRequest(origin, {
+    forwardedHost: request.headers.get('x-forwarded-host'),
+    host: request.headers.get('host'),
+    url: request.url,
+  })) {
     return json({ error: 'Cross-origin requests are not allowed.' }, 403);
   }
 
