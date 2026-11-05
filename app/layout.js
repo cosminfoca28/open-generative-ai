@@ -8,7 +8,13 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#09090b' };
+
 export const metadata = {
+  applicationName: 'AI Media Studio',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, title: 'AI Studio', statusBarStyle: 'black-translucent' },
+  icons: { icon: '/mobile-studio-icon.svg' },
   title: 'Open Generative AI — Free AI Image & Video Studio',
   description: 'Generate AI images and videos using 200+ models — Flux, Midjourney, Kling, Veo, Seedance and more.',
 };
